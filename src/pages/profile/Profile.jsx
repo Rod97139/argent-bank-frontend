@@ -1,16 +1,37 @@
 import { useSelector } from "react-redux";
 import "./Profile.scss";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import EditProfile from "../../components/profile/editProfile/EditProfile";
 
 const Profile = () => {
+    const { userInfo, userToken } = useSelector((state) => state.auth)
+    const [isEditing, setIsEditing] = useState(false)
+    const navigate = useNavigate()
+    // useEffect(() => {
+    //     if (!userToken) {
+    //         navigate('/sign-in')
+    //     }
+    // }, [userToken, navigate])
 
-    
+    const handleEdit = () => {
+        setIsEditing(true)
+    }
 
 
     return (
         <main className="main bg-dark">
             <div className="header-profile">
-                <h1>Welcome back<br />Tony Jarvis!</h1>
-                <button className="edit-button">Edit Name</button>
+                {userInfo ? <h1>Welcome back<br />{!isEditing && `${userInfo?.firstName} ${userInfo?.lastName} !`}</h1> : <div className="loader"></div>}
+
+                
+                
+                {!isEditing ? (
+                    <button className="edit-button" onClick={handleEdit}
+                >Edit Name</button> ) : (
+                <EditProfile isEditing={isEditing} setIsEditing={setIsEditing} />
+                )}
+                
             </div>
             <h2 className="sr-only">Accounts</h2>
             <section className="account">

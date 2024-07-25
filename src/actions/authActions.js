@@ -28,18 +28,48 @@ const backendURL = 'http://localhost:3001/api/v1'
 //   }
 // )
 
-export const userProfile = createAsyncThunk(
-  'auth/profile',
-  async (_, { rejectWithValue }) => {
+// export const userProfile = createAsyncThunk(
+//   'auth/profile',
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       const config = {
+//         headers: {
+//           'Content-Type': 'application/json',
+//           Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+//         },
+//       }
+//       const { data } = await axios.get(`${backendURL}/user/profile`, config)
+//       return data
+//     } catch (error) {
+//       if (error.response && error.response.data.message) {
+//         return rejectWithValue(error.response.data.message)
+//       } else {
+//         return rejectWithValue(error.message)
+//       }
+//     }
+//   }
+// )
+
+export const userUpdate = createAsyncThunk(
+  'auth/update',
+  async ({ firstName, lastName }, { rejectWithValue, getState }) => {
     try {
+      
+      const token = getState().auth.userToken
       const config = {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+          Authorization: `Bearer ${token}`,
         },
       }
-      const { data } = await axios.get(`${backendURL}/user/profile`, config)
-      console.log(data);
+      const { data } = await axios.put(
+        `${backendURL}/user/profile`,
+        {
+          "firstName": firstName,
+          "lastName": lastName
+        },
+        config
+      )
       return data
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -53,7 +83,7 @@ export const userProfile = createAsyncThunk(
 
 export const userLogin = createAsyncThunk(
   'auth/login',
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ email, password, rememberMe }, { rejectWithValue }) => {
     try {
       // configure header's Content-Type as JSON
       const config = {
@@ -67,8 +97,7 @@ export const userLogin = createAsyncThunk(
         config
       )
       // store user's token in local storage
-      console.log(data);
-      localStorage.setItem('userToken', data.body.token)
+      rememberMe ? localStorage.setItem('userToken', data.body.token) : localStorage.removeItem('userToken')
       return data
     } catch (error) {
       // return custom error message from API if any

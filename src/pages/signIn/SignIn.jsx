@@ -13,6 +13,7 @@ const SignIn = () => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [rememberMe, setRememberMe] = useState(false)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -27,7 +28,8 @@ const SignIn = () => {
         try {
             let loginData = {
                 email,
-                password
+                password,
+                rememberMe
             }
             dispatch(userLogin(loginData))
 
@@ -57,7 +59,14 @@ const SignIn = () => {
                         />
                     </div>
                     <div className="input-remember">
-                        <input type="checkbox" id="remember-me" /><label htmlFor="remember-me"
+                        <input type="checkbox" id="remember-me" 
+                        
+                        onChange={(e)=>{
+                            setRememberMe(e.target.checked)
+                            console.log(e.target.checked);
+                        }}
+                        /><label htmlFor="remember-me"
+                         
                         >Remember me</label
                         >
                     </div>

@@ -1,35 +1,35 @@
 import "./Header.scss"
 
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import argentBankLogo from "../../../assets/icons/argentBankLogo.png";
 import '@fortawesome/fontawesome-free/css/all.css'
 import { useDispatch, useSelector } from "react-redux";
 import { useGetUserDetailsQuery } from "../../../service/authService";
 import { useEffect, useState } from "react";
+import { logout, setCredentials } from "../../../slices/authSlice";
 
 const Header = () => {
 
-    const { userInfo } = useSelector((state) => state.auth)
+    const { userInfo, userToken } = useSelector((state) => state.auth)
     const dispatch = useDispatch()
-    const [userName, setUserName] = useState('')
+    const navigate = useNavigate()
 
     // automatically authenticate user if token is found
-    const { data, isFetching } = useGetUserDetailsQuery('userDetails', {
-    // perform a refetch every 15mins
-        pollingInterval: 900000,
+    const { data, isFetching, refetch } = useGetUserDetailsQuery('userDetails', { skip: !userToken
     })
 
-
-
-    data && console.log(data.body.firstName) // user object
+    useEffect(() => {
+        if (userToken) {
+          refetch().then(({ data }) => {
+            dispatch(setCredentials(data))
+          })
+        }
+      }, [userToken, refetch]);
 
     // useEffect(() => {
-    //         if (data.body.firstName) {
-    //             const { firstName } = data.body
-    //             setUserName(firstName)
-    //         }
-    //     }, []
-    // )
+    //     if (data) dispatch(setCredentials(data))
+
+    //   }, [data, dispatch])
 
 
     return (
@@ -45,16 +45,19 @@ const Header = () => {
                 <h1 className="sr-only">Argent Bank</h1>
             </Link>
             {
-                data  ? (
+                userInfo  ? (
                     <div>
                         <Link className="main-nav-item" to={"/profile"}>
                         <i className="fa fa-user-circle"></i>
-                        Tony
+                        { userInfo.firstName }
                         </Link>
-                        <Link className="main-nav-item" to={"/"}>
+                        <a className="main-nav-item" onClick={() => {
+                            dispatch(logout())
+                            navigate('/')
+                            }}>
                         <i className="fa fa-sign-out"></i>
                         Sign Out
-                        </Link>
+                        </a>
                 </div>
                     )
                         : (
