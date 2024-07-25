@@ -28,6 +28,29 @@ const backendURL = 'http://localhost:3001/api/v1'
 //   }
 // )
 
+export const userProfile = createAsyncThunk(
+  'auth/profile',
+  async (_, { rejectWithValue }) => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+        },
+      }
+      const { data } = await axios.get(`${backendURL}/user/profile`, config)
+      console.log(data);
+      return data
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message)
+      } else {
+        return rejectWithValue(error.message)
+      }
+    }
+  }
+)
+
 export const userLogin = createAsyncThunk(
   'auth/login',
   async ({ email, password }, { rejectWithValue }) => {

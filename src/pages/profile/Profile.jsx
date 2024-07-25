@@ -1,6 +1,11 @@
+import { useSelector } from "react-redux";
 import "./Profile.scss";
 
 const Profile = () => {
+
+    
+
+
     return (
         <main className="main bg-dark">
             <div className="header-profile">
