@@ -1,0 +1,288 @@
+swagger: '2.0'
+info:
+  title: ArgentBank Transactions API documentation
+  description: Contains all available API endpoints in this codebase
+  version: '1.0.0'
+  termsOfService: 'http://swagger.io/terms/'
+host: localhost:3001
+basePath: /api/v1
+schemes:
+  - http
+paths:
+  /user/transactions:
+    post:
+      security:
+          - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Retrieves User's Transactions.
+      description: visualiser toutes leurs transactions pour le mois en cours, groupées par compte 
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transactions Collection
+          schema:
+            $ref: '#/definitions/TransactionsResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /user/transaction:
+    post:
+      security:
+            - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Retrieves User's Transaction by Id
+      description: visualiser les détails d'une transaction
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: body
+          name: body
+          description: Transaction identifier
+          required: true
+          schema:
+            $ref: '#/definitions/Transaction'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Display the transaction
+          schema:
+            $ref: '#/definitions/TransactionResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    put:
+      security:
+            - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Replaces the User's Transaction resource.
+      description: ajouter des informations sur une transaction
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: body
+          name: body
+          description: new full body
+          required: true
+          schema:
+            $ref: '#/definitions/TransactionReplace'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Replace Successfully
+          schema:
+            $ref: '#/definitions/TransactionResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    delete:
+      security:
+          - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Removes the User's Transaction
+      description: supprimer une transaction
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: body
+          name: body
+          description: Delete with the correspondant id
+          required: true
+          schema:
+            $ref: '#/definitions/Transaction'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Deleted Successfully
+          schema:
+            $ref: '#/definitions/TransactionDeleteResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    patch:
+      security:
+          - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Updates the User's Transaction resource
+      description: modifier ou supprimer des informations sur une transaction
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: body
+          name: body
+          description: New details to update with the transaction id
+          required: true
+          schema:
+            $ref: '#/definitions/TransactionUpdate'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Updated Successfully
+          schema:
+            $ref: '#/definitions/TransactionResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  TransactionsResponse:
+    type: object
+    properties:
+          status:
+            type: integer
+          message:
+            type: string
+          body:
+            type: object
+            properties:
+              transactionsCollection:
+                type: array
+                items:
+                  type: object
+                  description: ''
+                  properties:
+                    id:
+                      readOnly: true
+                      type: integer
+                    date:
+                      type: string
+                    description:
+                      description: Description of the transaction
+                      type: string
+                    amount:
+                      description: Amount of the transaction
+                      type: number
+                    balance:
+                      description: Balance of the transaction
+                      type: number
+                    transactionType:
+                      description: Type of transaction
+                      type: string
+                    category:
+                      description: Category
+                      type: string
+                    notes:
+                      description: Notes
+                      type: string
+  Transaction:
+    properties:
+      id:
+        type: string
+        description: id de la transaction
+  TransactionResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        description: ''
+        properties:
+          id:
+            readOnly: true
+            type: integer
+          date:
+            type: string
+          description:
+            description: Description of the transaction
+            type: string
+          amount:
+            description: Amount of the transaction
+            type: number
+          balance:
+            description: Balance of the transaction
+            type: number
+          transactionType:
+            description: Type of transaction
+            type: string
+          category:
+            description: Category
+            type: string
+          notes:
+            description: Notes
+            type: string
+  TransactionReplace:
+    type: object
+    description: ''
+    properties:
+      id:
+        type: integer
+      date:
+        type: string
+      description:
+        description: Description of the transaction
+        type: string
+      amount:
+        description: Amount of the transaction
+        type: number
+      balance:
+        description: Balance of the transaction
+        type: number
+      transactionType:
+        description: Type of transaction
+        type: string
+      category:
+        description: Category
+        type: string
+      notes:
+        description: Notes
+        type: string
+  TransactionDeleteResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        description: ''
+  TransactionUpdate:
+    properties:
+      id:
+        type: string
+        description: id de la transaction
+      category:
+        type: string
+        description: categorie de la transaction
+      notes: 
+        type: string
+        description: notes de la transaction
