@@ -9,6 +9,7 @@ import Footer from "./components/layout/footer/Footer.jsx";
 import Home from './pages/home/Home.jsx';
 import SignIn from './pages/signIn/SignIn.jsx';
 import Profile from './pages/profile/Profile.jsx';
+import ProtectedRoute from './components/profile/protectedRoute/ProtectedRoute.jsx';
 
 const Router = () => {
     const AppLayout = () => (
@@ -32,7 +33,7 @@ const Router = () => {
                 },
                 {
                     path: "/profile",
-                    element: <Profile/>,
+                    element: <ProtectedRoute />,
                 },
                 {
                     path: "*",
