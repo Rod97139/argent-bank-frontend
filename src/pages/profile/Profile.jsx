@@ -29,7 +29,7 @@ const Profile = () => {
                 {!isEditing ? (
                     <button className="edit-button" onClick={handleEdit}
                 >Edit Name</button> ) : (
-                <EditProfile isEditing={isEditing} setIsEditing={setIsEditing} />
+                <EditProfile setIsEditing={setIsEditing} />
                 )}
                 
             </div>

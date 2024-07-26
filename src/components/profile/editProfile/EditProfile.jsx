@@ -1,8 +1,10 @@
 import { useState } from "react"
 import { userUpdate } from "../../../actions/authActions"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import "./EditProfile.scss"
 
 const EditProfile = ({setIsEditing}) => {
+    const { userInfo } = useSelector((state) => state.auth)
     const dispatch = useDispatch()
 
     const [firstName, setFirstName] = useState('')
@@ -25,20 +27,17 @@ const EditProfile = ({setIsEditing}) => {
 
 
   return (
-    <div>
-        <form onSubmit={(e) => handleSubmit(e)} >
-            <input type="text" id="firstName" name="firstName" value={firstName} required
+    <div className="edit-container">
+        <form className="edit-form" onSubmit={(e) => handleSubmit(e)} >
+            <input placeholder={userInfo.firstName} type="text" id="firstName" name="firstName" value={firstName} required
             onChange={(e) => setFirstName(e.target.value)}
             />
-            <input type="text" id="lastName" name="lastName" value={lastName} required
+            <input placeholder={userInfo.lastName} type="text" id="lastName" name="lastName" value={lastName} required
             onChange={(e) => setLastName(e.target.value)}
             />
-
-            
-            <button type="button" onClick={() => setIsEditing(false)}>cancel</button>
-
-            <button type="submit" 
-            >edit profile</button>
+            <button className="edit-button btn-save" type="submit" 
+            >Save</button>
+            <button className="edit-button btn-cancel" type="button" onClick={() => setIsEditing(false)}>Cancel</button>
         </form>
       
     </div>
