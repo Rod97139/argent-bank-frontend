@@ -6,7 +6,7 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import { useDispatch, useSelector } from "react-redux";
 import { useGetUserDetailsQuery } from "../../../service/authService";
 import { useEffect, useState } from "react";
-import { logout, setCredentials } from "../../../slices/authSlice";
+import { logout, setCredentials, setLoading, setSearchUser } from "../../../slices/authSlice";
 
 const Header = () => {
 
@@ -15,21 +15,19 @@ const Header = () => {
     const navigate = useNavigate()
 
     // automatically authenticate user if token is found
-    const { data, isFetching, refetch } = useGetUserDetailsQuery('userDetails', { skip: !userToken
+    const { data, isFetching, refetch } = useGetUserDetailsQuery('userDetails', { 
+        skip: !userToken
     })
 
     useEffect(() => {
+        dispatch(setSearchUser(true))
+        dispatch(setLoading(true))
         if (userToken) {
           refetch().then(({ data }) => {
             dispatch(setCredentials(data))
           })
         }
       }, [userToken, refetch]);
-
-    // useEffect(() => {
-    //     if (data) dispatch(setCredentials(data))
-
-    //   }, [data, dispatch])
 
 
     return (

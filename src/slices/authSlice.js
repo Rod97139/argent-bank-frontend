@@ -25,9 +25,20 @@ const authSlice = createSlice({
       state.userToken = null
       state.error = null
       state.success = false
+      state.searchUser = false
+    },
+    setLoading: (state, { payload }) => {
+      state.loading = payload
+    },
+    setSearchUser: (state, { payload }) => {
+      state.searchUser = payload
     },
     setCredentials: (state, { payload }) => {
-      state.userInfo = payload.body
+      state.loading = true
+      if (payload) {
+        state.userInfo = payload.body
+      }
+      state.loading = false
     },
   },
   extraReducers: (builder) => {
@@ -36,7 +47,6 @@ const authSlice = createSlice({
       state.error = null
     })
     builder.addCase(userLogin.fulfilled, (state, { payload }) => {
-      state.loading = false
       state.success = true
       // state.userInfo = payload
       
@@ -77,5 +87,5 @@ const authSlice = createSlice({
   },
 })
 
-export const { logout, setCredentials } = authSlice.actions
+export const { logout, setCredentials, setLoading, setSearchUser } = authSlice.actions
 export default authSlice.reducer
