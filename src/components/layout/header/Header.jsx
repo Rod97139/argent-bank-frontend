@@ -5,8 +5,8 @@ import argentBankLogo from "../../../assets/icons/argentBankLogo.png";
 import '@fortawesome/fontawesome-free/css/all.css'
 import { useDispatch, useSelector } from "react-redux";
 import { useGetUserDetailsQuery } from "../../../service/authService";
-import { useEffect, useState } from "react";
-import { logout, setCredentials, setLoading, setSearchUser } from "../../../slices/authSlice";
+import { useEffect } from "react";
+import { logout, setCredentials, setIsSearchingUser, setLoading } from "../../../slices/authSlice";
 
 const Header = () => {
 
@@ -15,17 +15,22 @@ const Header = () => {
     const navigate = useNavigate()
 
     // automatically authenticate user if token is found
-    const { data, isFetching, refetch } = useGetUserDetailsQuery('userDetails', { 
+    const { refetch } = useGetUserDetailsQuery('userDetails', { 
         skip: !userToken
     })
 
     useEffect(() => {
-        dispatch(setSearchUser(true))
+        dispatch(setIsSearchingUser(true))
         dispatch(setLoading(true))
         if (userToken) {
           refetch().then(({ data }) => {
             dispatch(setCredentials(data))
+          }).then(() => {
+            dispatch(setIsSearchingUser(false))
           })
+        } else {
+          dispatch(setIsSearchingUser(false))
+          dispatch(setLoading(false))
         }
       }, [userToken, refetch]);
 

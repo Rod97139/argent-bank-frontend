@@ -1,14 +1,15 @@
 import { useSelector } from 'react-redux'
-import { useNavigate} from 'react-router-dom'
-import Profile from '../../../pages/profile/Profile'
+import { Outlet, useNavigate} from 'react-router-dom'
 import { useEffect } from 'react'
 
 const ProtectedRoute = () => {
-  const { userToken, userInfo, loading, searchUser } = useSelector((state) => state.auth)
+  
+  const { userToken, userInfo, loading, isSearchingUser } = useSelector((state) => state.auth)
   const navigate = useNavigate()
 
+
   const shouldNavigate = () => {
-    if (!userInfo && !loading && searchUser) {
+    if (!userInfo && !loading && isSearchingUser) {
       navigate('/sign-in')
     }
   }
@@ -16,14 +17,12 @@ const ProtectedRoute = () => {
   useEffect(() => {
     if (!userToken) {
       navigate('/sign-in')
-    }
-    // else 
-    if (userToken) {
+    } else {
         shouldNavigate()
     }
   }, [loading])
 
   // returns child route elements
-  return <Profile />
+  return <Outlet />
 }
 export default ProtectedRoute

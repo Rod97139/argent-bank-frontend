@@ -12,6 +12,7 @@ const initialState = {
   userToken: userToken,
   error: null,
   success: false,
+  isSearchingUser: false,
 }
 
 const authSlice = createSlice({
@@ -25,13 +26,13 @@ const authSlice = createSlice({
       state.userToken = null
       state.error = null
       state.success = false
-      state.searchUser = false
+      state.isSearchingUser = false
     },
     setLoading: (state, { payload }) => {
       state.loading = payload
     },
-    setSearchUser: (state, { payload }) => {
-      state.searchUser = payload
+    setIsSearchingUser: (state, { payload }) => {
+      state.isSearchingUser = payload
     },
     setCredentials: (state, { payload }) => {
       state.loading = true
@@ -87,5 +88,5 @@ const authSlice = createSlice({
   },
 })
 
-export const { logout, setCredentials, setLoading, setSearchUser } = authSlice.actions
+export const { logout, setCredentials, setLoading, setIsSearchingUser } = authSlice.actions
 export default authSlice.reducer

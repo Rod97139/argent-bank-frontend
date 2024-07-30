@@ -32,8 +32,13 @@ const Router = () => {
                     element: <SignIn/>,
                 },
                 {
-                    path: "/profile",
                     element: <ProtectedRoute />,
+                    children: [
+                        {
+                            path: "/profile",
+                            element: <Profile/>,
+                        },
+                    ],
                 },
                 {
                     path: "*",
