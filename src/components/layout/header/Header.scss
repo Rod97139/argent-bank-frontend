@@ -1,3 +1,16 @@
-.main-nav-item {
-    cursor: pointer;
+.fa {
+    margin-right: 0.2rem;
+}
+
+.nav-items-container {
+    .main-nav-item {
+        cursor: pointer;
+    }
+    
+    @media screen and (max-width: 768px) {
+            min-width: 164px;
+            .main-nav-item {
+                font-size: 0.8rem;
+            }
+    }
 }

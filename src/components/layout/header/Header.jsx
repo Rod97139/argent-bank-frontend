@@ -49,7 +49,7 @@ const Header = () => {
             </Link>
             {
                 userInfo  ? (
-                    <div>
+                    <div className="nav-items-container">
                         <Link className="main-nav-item" to={"/profile"}>
                         <i className="fa fa-user-circle"></i>
                         { userInfo.firstName }
@@ -64,7 +64,7 @@ const Header = () => {
                 </div>
                     )
                         : (
-                <div>
+                <div className="nav-items-container">
                     <Link className="main-nav-item" to={"/sign-in"}>
                     <i className="fa fa-user-circle"></i>
                     Sign In
